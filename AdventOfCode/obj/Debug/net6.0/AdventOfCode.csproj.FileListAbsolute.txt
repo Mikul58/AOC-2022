@@ -16,3 +16,4 @@
 /Users/silu/RiderProjects/AdventOfCode/AdventOfCode/bin/Debug/net6.0/day1.txt
 /Users/silu/RiderProjects/AdventOfCode/AdventOfCode/bin/Debug/net6.0/day2.txt
 /Users/silu/RiderProjects/AdventOfCode/AdventOfCode/bin/Debug/net6.0/day3.txt
+/Users/silu/RiderProjects/AdventOfCode/AdventOfCode/bin/Debug/net6.0/day4.txt

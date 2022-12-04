@@ -146,55 +146,109 @@ static void Day3Part1()
 }
 #endregion
 #region  Part2
-var input = File.ReadAllLines("day3.txt");
-var itemList = new List<char>();
 
-for(var i = 0; i < input.Length; i++)
+static void Day3Part2()
 {
-    if ((i + 1) % 3 != 0)
-    {
-        continue;
-    }
-    
-    for (var j = 0; j < input[i - 2].Length; j++)
-    {
-        if (input[i - 1].Contains(input[i - 2][j]))
-        {
-            if (input[i].Contains(input[i - 2][j]))
-            {
-                itemList.Add(input[i - 2][j]);
-                break;
-            }
-        }
-    }
-}
+    var input = File.ReadAllLines("day3.txt");
+    var itemList = new List<char>();
 
-var itemDictionary = GetItemsDictionary();
-var totalPoints = itemList.Sum(item => itemDictionary[item]);
-Console.WriteLine(totalPoints);
-
-Dictionary<char, int> GetItemsDictionary()
-{
-    var dict = new Dictionary<char, int>();
-    for (int i = 'A', j = 27; i <= 'z'; i++)
+    for (var i = 0; i < input.Length; i++)
     {
-        if ((char) i > 'Z' && (char) i < 'a')
+        if ((i + 1) % 3 != 0)
         {
             continue;
         }
-    
-        dict.Add((char)i, j);
-        j++;
-        
-        if ((char) i == 'Z')
+
+        for (var j = 0; j < input[i - 2].Length; j++)
         {
-            j = 1;
+            if (input[i - 1].Contains(input[i - 2][j]))
+            {
+                if (input[i].Contains(input[i - 2][j]))
+                {
+                    itemList.Add(input[i - 2][j]);
+                    break;
+                }
+            }
         }
     }
-    return dict;
+
+    var itemDictionary = GetItemsDictionary();
+    var totalPoints = itemList.Sum(item => itemDictionary[item]);
+    Console.WriteLine(totalPoints);
+
+    Dictionary<char, int> GetItemsDictionary()
+    {
+        var dict = new Dictionary<char, int>();
+        for (int i = 'A', j = 27; i <= 'z'; i++)
+        {
+            if ((char) i > 'Z' && (char) i < 'a')
+            {
+                continue;
+            }
+
+            dict.Add((char) i, j);
+            j++;
+
+            if ((char) i == 'Z')
+            {
+                j = 1;
+            }
+        }
+
+        return dict;
+    }
 }
+#endregion
+#endregion
+#region Day4
+#region Day4Part1
+static void Day4Part1()
+{
+    var input = File.ReadAllLines("day4.txt");
 
+    var fullyOverlapedAssignmentsCount = 0;
 
+    foreach (var line in input)
+    {
+        var lineWithOnlyValues = line.Split(new char[]{',', '-'});
+        var valuesAsIntArray = Array.ConvertAll(lineWithOnlyValues, int.Parse);
+
+        if (valuesAsIntArray[0] <= valuesAsIntArray[2] && valuesAsIntArray[1] >= valuesAsIntArray[3])
+        {
+            fullyOverlapedAssignmentsCount++;
+        }
+        else if (valuesAsIntArray[0] >= valuesAsIntArray[2] && valuesAsIntArray[1] <= valuesAsIntArray[3])
+        {
+            fullyOverlapedAssignmentsCount++;
+        }
+    }
+    
+    Console.WriteLine(fullyOverlapedAssignmentsCount);
+}
+#endregion
+#region Day4Part2
+static void Day4Part2()
+{
+    var input = File.ReadAllLines("day4.txt");
+    var fullyOverlapedAssignmentsCount = 0;
+
+    foreach (var line in input)
+    {
+        var lineWithOnlyValues = line.Split(',', '-');
+        var valuesAsIntArray = Array.ConvertAll(lineWithOnlyValues, int.Parse);
+
+        if (valuesAsIntArray[0] <= valuesAsIntArray[2] && valuesAsIntArray[1] >= valuesAsIntArray[2])
+            fullyOverlapedAssignmentsCount++;
+        else if (valuesAsIntArray[0] <= valuesAsIntArray[3] && valuesAsIntArray[1] >= valuesAsIntArray[3])
+            fullyOverlapedAssignmentsCount++;
+        else if (valuesAsIntArray[2] <= valuesAsIntArray[0] && valuesAsIntArray[3] >= valuesAsIntArray[0])
+            fullyOverlapedAssignmentsCount++;
+        else if (valuesAsIntArray[3] <= valuesAsIntArray[0] && valuesAsIntArray[3] >= valuesAsIntArray[1])
+            fullyOverlapedAssignmentsCount++;
+    }
+
+    Console.WriteLine(fullyOverlapedAssignmentsCount);
+}
 #endregion
 #endregion
 #endregion
