@@ -210,7 +210,7 @@ static void Day4Part1()
 
     foreach (var line in input)
     {
-        var lineWithOnlyValues = line.Split(new char[]{',', '-'});
+        var lineWithOnlyValues = line.Split(',', '-');
         var valuesAsIntArray = Array.ConvertAll(lineWithOnlyValues, int.Parse);
 
         if (valuesAsIntArray[0] <= valuesAsIntArray[2] && valuesAsIntArray[1] >= valuesAsIntArray[3])
