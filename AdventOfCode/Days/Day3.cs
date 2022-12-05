@@ -5,13 +5,12 @@ public static class Day3
     public static void Part1()
     {
         var input = File.ReadAllLines("day3.txt");
-
         var itemList = new List<char>();
 
         foreach (var line in input)
         {
             var halfInputLength = (line.Length + 1) / 2;
-            var firstHalf = line[..halfInputLength];
+            var firstHalf = line.Substring(0, halfInputLength);
             var secondHalf = line.Substring(halfInputLength, line.Length - halfInputLength);
 
             foreach (var character in secondHalf.Where(t => firstHalf.Contains(t)))
@@ -43,11 +42,8 @@ public static class Day3
             {
                 if (input[i - 1].Contains(input[i - 2][j]))
                 {
-                    if (input[i].Contains(input[i - 2][j]))
-                    {
-                        itemList.Add(input[i - 2][j]);
-                        break;
-                    }
+                    itemList.Add(input[i - 2][j]);
+                    break;
                 }
             }
         }
