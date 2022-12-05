@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿//I'll rearrange structure of Days later, I am aware that with regions it looks awful
 
 #region Days
 #region Day1
@@ -248,6 +248,106 @@ static void Day4Part2()
     }
 
     Console.WriteLine(fullyOverlapedAssignmentsCount);
+}
+#endregion
+#endregion
+#region Day5
+#region Day5Part1
+static void Day5Part1()
+{
+    var input = File.ReadAllLines("day5.txt");
+
+    var phrasesToDelete = new[] {"move", "from", "to"};
+    var instructions = input
+        .Where(x => x.StartsWith("move"))
+        .Select(x => x.Split(phrasesToDelete, StringSplitOptions.RemoveEmptyEntries))
+        .ToArray();
+
+    var stacks = new Dictionary<int, Stack<char>>();
+
+    for (var i = input.Length - 1; i >= 0; i--)
+    {
+        for (var j = 0; j < input[i].Length; j++)
+        {
+            if (char.IsUpper(input[i][j]))
+            {
+                if (!stacks.ContainsKey(1 + j / 4))
+                {
+                    stacks.Add(1 + j / 4, new Stack<char>());
+                }
+
+                stacks[1 + j / 4].Push(input[i][j]);
+            }
+        }
+    }
+
+    foreach (var values in instructions)
+    {
+        var currentValues = Array.ConvertAll(values, int.Parse);
+        var numberOfValuesToMove = currentValues[0];
+        for (var i = 0; i < numberOfValuesToMove; i++)
+        {
+            stacks[currentValues[2]].Push(stacks[currentValues[1]].Peek());
+            stacks[currentValues[1]].Pop();
+        }
+    }
+
+    foreach (var stack in stacks)
+    {
+        Console.Write(stack.Value.Peek());
+    }
+}
+#endregion
+#region Day5Part2
+static void Day5Part2()
+{
+    var input = File.ReadAllLines("day5.txt");
+
+    var phrasesToDelete = new[]{"move", "from", "to"};
+    var instructions = input
+        .Where(x => x.StartsWith("move"))
+        .Select(x => x.Split(phrasesToDelete, StringSplitOptions.RemoveEmptyEntries))
+        .ToArray();
+
+    var stacks = new Dictionary<int, Stack<char>>();
+
+    for (var i = input.Length - 1; i >= 0; i--)
+    {
+        for (var j = 0; j < input[i].Length; j++)
+        {
+            if (char.IsUpper(input[i][j]))
+            {
+                if (!stacks.ContainsKey(1 + j / 4))
+                {
+                    stacks.Add(1 + j / 4, new Stack<char>());
+                }
+            
+                stacks[1 + j / 4].Push(input[i][j]);
+            }
+        }
+    }
+
+    foreach (var values in instructions)
+    {
+        var instructionsForCurrentOperation = Array.ConvertAll(values, int.Parse);
+        var numberOfValuesToMove = instructionsForCurrentOperation[0];
+        var cratesList = new List<char>();
+        for (var i = 0; i < numberOfValuesToMove; i++)
+        {
+            cratesList.Add(stacks[instructionsForCurrentOperation[1]].Peek());
+            stacks[instructionsForCurrentOperation[1]].Pop();
+        }
+        cratesList.Reverse();
+        foreach (var crate in cratesList)
+        {
+            stacks[instructionsForCurrentOperation[2]].Push(crate);
+        }
+    }
+
+    foreach (var stack in stacks)
+    {
+        Console.Write(stack.Value.Peek());
+    }
 }
 #endregion
 #endregion
