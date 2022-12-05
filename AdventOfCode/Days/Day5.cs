@@ -8,7 +8,7 @@ public class Day5
         var instructions = MapInstructionsFromInput(input);
 
         var stacksDictionary = MapStacksDictionaryFromInput(input);
-        RearrangeStacksWithCrateMover9000(instructions, ref stacksDictionary);
+        stacksDictionary = RearrangeStacksWithCrateMover9000(instructions, stacksDictionary);
         DisplayTopCrates(stacksDictionary);
     }
 
@@ -18,8 +18,7 @@ public class Day5
         var instructions = MapInstructionsFromInput(input);
 
         var stacksDictionary = MapStacksDictionaryFromInput(input);
-
-        RearrangeStacksWithCrateMover9001(instructions, ref stacksDictionary);
+        stacksDictionary = RearrangeStacksWithCrateMover9001(instructions, stacksDictionary);
         DisplayTopCrates(stacksDictionary);
     }
 
@@ -56,8 +55,8 @@ public class Day5
         return stacks;
     }
 
-    private static void RearrangeStacksWithCrateMover9000(IEnumerable<string[]> instructions,
-        ref Dictionary<int, Stack<char>> stacks)
+    private static Dictionary<int, Stack<char>> RearrangeStacksWithCrateMover9000(IEnumerable<string[]> instructions,
+        Dictionary<int, Stack<char>> stacks)
     {
         foreach (var values in instructions)
         {
@@ -69,27 +68,30 @@ public class Day5
                 stacks[currentValues[1]].Pop();
             }
         }
+
+        return stacks;
     }
 
-    private static void RearrangeStacksWithCrateMover9001(IEnumerable<string[]> instructions,
-        ref Dictionary<int, Stack<char>> stacks)
+    private static Dictionary<int, Stack<char>> RearrangeStacksWithCrateMover9001(IEnumerable<string[]> instructions,
+        Dictionary<int, Stack<char>> stacks)
     {
         foreach (var values in instructions)
         {
             var instructionsForCurrentOperation = Array.ConvertAll(values, int.Parse);
             var numberOfValuesToMove = instructionsForCurrentOperation[0];
-            var cratesList = new List<char>();
+            var cratesStack = new Stack<char>();
             for (var i = 0; i < numberOfValuesToMove; i++)
             {
-                cratesList.Add(stacks[instructionsForCurrentOperation[1]].Peek());
-                stacks[instructionsForCurrentOperation[1]].Pop();
+                cratesStack.Push(stacks[instructionsForCurrentOperation[1]].Pop());
             }
 
-            for (var i = cratesList.Count - 1; i >= 0; i--)
+            while (cratesStack.Count > 0)
             {
-                stacks[instructionsForCurrentOperation[2]].Push(cratesList[i]);
+                stacks[instructionsForCurrentOperation[2]].Push(cratesStack.Pop());
             }
         }
+
+        return stacks;
     }
 
     private static void DisplayTopCrates(Dictionary<int, Stack<char>> stacks)
