@@ -1,6 +1,6 @@
 namespace AdventOfCode.Days;
 
-public class Day6
+public static class Day6
 {
     public static void Part1()
     {
