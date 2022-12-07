@@ -8,30 +8,27 @@ public static class Day7
         {
             DirectoryName = directoryName;
             AncestorDirectory = ancestorDirectory;
-            ChildDirectories = new List<Directory>();
+            ChildDirectoryList = new List<Directory>();
             FilesList = new List<Tuple<int, string>>();
         }
 
         public string DirectoryName { get; }
         public Directory? AncestorDirectory { get; }
         public List<Tuple<int, string>> FilesList { get; }
-        public List<Directory> ChildDirectories { get; }
+        public List<Directory> ChildDirectoryList { get; }
 
         public void AddDirectory(string directoryName, Directory? ancestor = null)
         {
-            ChildDirectories.Add(new Directory(directoryName, ancestor));
+            ChildDirectoryList.Add(new Directory(directoryName, ancestor));
         }
 
         public void AddFile(int fileSize, string fileName)
         {
             FilesList.Add(new Tuple<int, string>(fileSize, fileName));
         }
-
-        public int CalculateAllFilesInDirectory()
-            => FilesList.Sum(file => file.Item1);
     }
 
-    public static void Part1()
+    public static async Task Part1()
     {
         var input = File.ReadAllLines("day7.txt");
         var rootDirectory = new Directory("/");
@@ -68,38 +65,32 @@ public static class Day7
                         rootDirectory = rootDirectory?.AncestorDirectory;
                         break;
                     default:
-                        rootDirectory = rootDirectory?.ChildDirectories.FirstOrDefault(x => x.DirectoryName == dirName);
+                        rootDirectory = rootDirectory?.ChildDirectoryList.FirstOrDefault(x => x.DirectoryName == dirName);
                         break;
                 }
             }
         }
-
-        Console.WriteLine(GetAllChildDirectorySizesLessThanHundredThousand(rootDirectoryHead));
+        
+        Console.WriteLine(await GetAllChildDirectorySizesLessThanHundredThousand(rootDirectoryHead));
     }
 
-    private static int GetAllChildDirectorySizesLessThanHundredThousand(Directory rootDirectory)
+    private static async Task<long> GetAllChildDirectorySizesLessThanHundredThousand(Directory rootDirectory)
     {
-        var childDirectorySizesList = new List<int>();
-
-        foreach (var childDirectory in rootDirectory.ChildDirectories)
+        long allDirectoriesSum = 0;
+        
+        foreach (var childDirectory in rootDirectory.ChildDirectoryList)
         {
-            var childDirectoriesSize = GetAllChildDirectorySizesLessThanHundredThousand(childDirectory);
-            childDirectorySizesList.Add(childDirectoriesSize);
+            allDirectoriesSum += await GetAllChildDirectorySizesLessThanHundredThousand(childDirectory);
         }
-
-        var sizeFromCurrentDirectory = 0;
-
-        foreach (var file in rootDirectory.FilesList)
-        {
-            sizeFromCurrentDirectory += file.Item1;
-        }
+        
+        var sizeFromCurrentDirectory = rootDirectory.FilesList.Sum(file => file.Item1);
 
         if (sizeFromCurrentDirectory <= 100000)
         {
-            childDirectorySizesList.Add(sizeFromCurrentDirectory);
+            allDirectoriesSum += sizeFromCurrentDirectory;
         }
-
-        return childDirectorySizesList.Sum();
+        
+        return allDirectoriesSum;
     }
 
     public static void Part2()
