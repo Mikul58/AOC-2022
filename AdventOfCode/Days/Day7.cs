@@ -16,6 +16,7 @@ public static class Day7
         public Directory? AncestorDirectory { get; }
         public List<Tuple<int, string>> FilesList { get; }
         public List<Directory> ChildDirectoryList { get; }
+        public int SizeOfAllFilesInDirectory { get; private set; }
 
         public void AddDirectory(string directoryName, Directory? ancestor = null)
         {
@@ -26,13 +27,23 @@ public static class Day7
         {
             FilesList.Add(new Tuple<int, string>(fileSize, fileName));
         }
+
+        public void GetSizeOfAllFilesThatDirectoryContains()
+        {
+            SizeOfAllFilesInDirectory = FilesList.Sum(x => x.Item1);
+
+            foreach (var childDirectory in ChildDirectoryList)
+            {
+                SizeOfAllFilesInDirectory += childDirectory.SizeOfAllFilesInDirectory;
+            }
+        }
     }
 
-    public static async Task Part1()
+    public static void Part1()
     {
         var input = File.ReadAllLines("day7.txt");
         var rootDirectory = new Directory("/");
-        var rootDirectoryHead = rootDirectory;
+        var sumOfSizesLessThanHundredThousand = 0;
 
         foreach (var line in input)
         {
@@ -62,6 +73,11 @@ public static class Day7
                     case "/":
                         continue;
                     case "..":
+                        rootDirectory?.GetSizeOfAllFilesThatDirectoryContains();
+                        if (rootDirectory?.SizeOfAllFilesInDirectory <= 100000)
+                        {
+                            sumOfSizesLessThanHundredThousand += rootDirectory.SizeOfAllFilesInDirectory;
+                        }
                         rootDirectory = rootDirectory?.AncestorDirectory;
                         break;
                     default:
@@ -71,30 +87,6 @@ public static class Day7
             }
         }
         
-        Console.WriteLine(await GetAllChildDirectorySizesLessThanHundredThousand(rootDirectoryHead));
-    }
-
-    private static async Task<long> GetAllChildDirectorySizesLessThanHundredThousand(Directory rootDirectory)
-    {
-        long allDirectoriesSum = 0;
-        
-        foreach (var childDirectory in rootDirectory.ChildDirectoryList)
-        {
-            allDirectoriesSum += await GetAllChildDirectorySizesLessThanHundredThousand(childDirectory);
-        }
-        
-        var sizeFromCurrentDirectory = rootDirectory.FilesList.Sum(file => file.Item1);
-
-        if (sizeFromCurrentDirectory <= 100000)
-        {
-            allDirectoriesSum += sizeFromCurrentDirectory;
-        }
-        
-        return allDirectoriesSum;
-    }
-
-    public static void Part2()
-    {
-        var input = File.ReadAllLines("day7.txt");
+        Console.WriteLine(sumOfSizesLessThanHundredThousand);
     }
 }
