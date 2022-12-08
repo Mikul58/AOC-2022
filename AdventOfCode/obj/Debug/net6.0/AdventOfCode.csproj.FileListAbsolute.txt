@@ -20,3 +20,4 @@
 /Users/silu/RiderProjects/AdventOfCode/AdventOfCode/bin/Debug/net6.0/day5.txt
 /Users/silu/RiderProjects/AdventOfCode/AdventOfCode/bin/Debug/net6.0/day6.txt
 /Users/silu/RiderProjects/AdventOfCode/AdventOfCode/bin/Debug/net6.0/day7.txt
+/Users/silu/RiderProjects/AdventOfCode/AdventOfCode/bin/Debug/net6.0/day8.txt
