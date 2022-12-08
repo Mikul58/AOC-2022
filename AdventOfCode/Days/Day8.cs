@@ -105,4 +105,112 @@ public class Day8
 
         return true;
     }
+
+    public static void Part2()
+    {
+        var input = File.ReadAllLines("day8.txt").Select(row => row.Select(inputChar => inputChar - '0').ToArray())
+            .ToArray();
+
+        var highestValue = 0;
+
+        for (var i = 0; i < input.Length; i++)
+        {
+            for (var j = 0; j < input[i].Length; j++)
+            {
+                var currentValue =
+                    GetLengthFromBottom(input, i, j) * GetLengthFromLeft(input, i, j) *
+                    GetLengthFromRight(input, i, j) * GetLengthFromTop(input, i, j);
+                if(currentValue > highestValue)
+                {
+                    highestValue = currentValue;
+                }
+            }
+        }
+        
+        Console.WriteLine(highestValue);
+    }
+
+    private static int GetLengthFromTop(IReadOnlyList<int[]> grid, int a, int b)
+    {
+        if (a - 1 < 0)
+        {
+            return 0;
+        }
+        
+        var counter = 0;
+        
+        for (var i = a - 1; i >= 0; i--)
+        {
+            counter++;
+            if (grid[i][b] >= grid[a][b])
+            {
+                break;
+            }
+        }
+
+        return counter;
+    }
+
+    private static int GetLengthFromBottom(IReadOnlyList<int[]> grid, int a, int b)
+    {
+        if (a + 1 > grid.Count)
+        {
+            return 0;
+        }
+        
+        var counter = 0;
+
+        for (var i = a + 1; i < grid.Count; i++)
+        {
+            counter++;
+            if (grid[i][b] >= grid[a][b])
+            {
+                break;
+            }
+        }
+
+        return counter;
+    }
+
+    private static int GetLengthFromRight(IReadOnlyList<int[]> grid, int a, int b)
+    {
+        if (b + 1 > grid[a].Length)
+        {
+            return 0;
+        }
+        
+        var counter = 0;
+        
+        for (var i = b + 1; i < grid[a].Length; i++)
+        {
+            counter++;
+            if (grid[a][i] >= grid[a][b])
+            {
+                break;
+            }
+        }
+
+        return counter;
+    }
+
+    private static int GetLengthFromLeft(IReadOnlyList<int[]> grid, int a, int b)
+    {
+        if (b - 1 < 0)
+        {
+            return 0;
+        }
+        
+        var counter = 0;
+        
+        for (var i = b - 1; i >= 0; i--)
+        {
+            counter++;
+            if (grid[a][i] >= grid[a][b])
+            {
+                break;
+            }
+        }
+
+        return counter;
+    }
 }
