@@ -1,6 +1,3 @@
-using System.Text;
-using Microsoft.VisualBasic.FileIO;
-
 namespace AdventOfCode.Days;
 
 public static class Day7
